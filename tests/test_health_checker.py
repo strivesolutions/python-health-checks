@@ -12,8 +12,8 @@ async def test_run_checks():
         return HealthCheckResult.ok(name)
 
     check = create_health_check("test", passing_check)
-    _, healthy = await run_checks("test_service", [check])
-    assert healthy
+    result = await run_checks("test_service", [check])
+    assert result.healthy
 
 
 @pytest.mark.asyncio
@@ -25,10 +25,10 @@ async def test_check_timeout():
     check = create_health_check_with_timeout("slow", 1, slow_check)
 
     start = default_timer()
-    _, healthy = await run_checks("test_service", [check])
+    result = await run_checks("test_service", [check])
     end = default_timer()
 
-    assert not healthy
+    assert not result.healthy
 
     expected = 1
     actual = end - start

@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from typing import Optional
 
 from .health_check_result import (
     HealthCheckResult,
@@ -6,11 +6,11 @@ from .health_check_result import (
 )
 
 
-@dataclass
 class ServiceHealth:
-    service_name: str
-    checks: dict[str, HealthCheckResult] = field(default_factory=dict)
-    healthy: bool = True
+    def __init__(self, service_name: str, checks: Optional[dict[str, HealthCheckResult]] = None):
+        self.service_name = service_name
+        self.checks = checks or {}
+        self.healthy = True
 
     def add_result(self, result: HealthCheckResult) -> None:
         self.checks[result.check_name] = result

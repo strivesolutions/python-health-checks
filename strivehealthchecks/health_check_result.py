@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
@@ -10,11 +9,11 @@ class HealthCheckStatus(str, Enum):
     unhealthy = "unhealthy"
 
 
-@dataclass
 class HealthCheckResult:
-    check_name: str
-    status: HealthCheckStatus
-    error_details: Optional[str] = None
+    def __init__(self, check_name: str, status: HealthCheckStatus, error_details: Optional[str] = None):
+        self.check_name = check_name
+        self.status = status
+        self.error_details = error_details
 
     def to_dict(self) -> dict:
         d = {

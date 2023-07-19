@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "strivehealthchecks"
 version = "0.1.0"
 requires-python = ">=3.10"
-description = "A flexible logging abstraction layer"
+description = "A simple framework for running health checks"
 readme = "README.md"
 license = { file="LICENSE" }
 dynamic = ["dependencies"]
