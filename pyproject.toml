@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "strivehealthchecks"
-version = "0.1.0"
+version = "1.0.0"
 requires-python = ">=3.10"
-description = "A simple framework for running health checks"
+description = "A simple framework for running health checks."
 readme = "README.md"
 license = { file="LICENSE" }
 dynamic = ["dependencies"]
@@ -15,8 +15,8 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt"]}
 
 [project.urls]
-"Homepage" = "https://github.com/strivesolutions/python-fastapi-framework"
-"Bug Tracker" = "https://github.com/strivesolutions/python-fastapi-framework/issues"
+"Homepage" = "https://github.com/strivesolutions/python-health-checks"
+"Bug Tracker" = "https://github.com/strivesolutions/python-health-checks/issues"
 
 [tool.black]
 line-length=160

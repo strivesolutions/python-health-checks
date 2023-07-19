@@ -16,15 +16,10 @@ class HealthChecker:
         self.timeout_seconds = timeout_seconds
 
     def run(self) -> HealthCheckResult:
-        return self.__run(self.name)
-
-
-def create_health_check(name: str, run: HealthCheckFunc) -> HealthChecker:
-    return HealthChecker(name=name, run=run)
-
-
-def create_health_check_with_timeout(name: str, timeout_seconds: int, run: HealthCheckFunc) -> HealthChecker:
-    return HealthChecker(name=name, run=run, timeout_seconds=timeout_seconds)
+        try:
+            return self.__run(self.name)
+        except Exception as e:
+            return HealthCheckResult.unhealthy(self.name, str(e))
 
 
 async def run_checks(
