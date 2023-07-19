@@ -76,7 +76,7 @@ def check_two() -> HealthChecker:
 async def health_handler(response: Response, checks: list[HealthChecker] = Depends(create_health_checks)):
     result = await run_checks("sample", checks)
 
-    response.status_code = 500 if result.healthy else 200
+    response.status_code = 200 if result.healthy else 500
     return result.to_dict()
 ```
 
