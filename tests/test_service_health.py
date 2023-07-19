@@ -1,15 +1,15 @@
-from strivehealthchecks import HealthCheckResult, ServiceHealth
+from strivehealthchecks import HealthCheckResult
+from strivehealthchecks.service_health import ServiceHealth
 
 
 def test_healthy_to_dict():
     result = ServiceHealth(
-        serviceName="test_service",
+        service_name="test_service",
         checks={"test_check": HealthCheckResult.ok(check_name="test_check")},
     )
 
     assert result.to_dict() == {
         "serviceName": "test_service",
-        "unhealthy": False,
         "checks": [
             {
                 "checkName": "test_check",
@@ -25,10 +25,9 @@ def test_unhealthy_to_dict():
         checks={"test_check": HealthCheckResult.unhealthy(check_name="test_check", error_details="error_details")},
     )
 
-    d = result.serialize()
+    d = result.to_dict()
     assert d == {
         "serviceName": "test_service",
-        "unhealthy": True,
         "checks": [
             {
                 "checkName": "test_check",
@@ -40,11 +39,11 @@ def test_unhealthy_to_dict():
 
 
 def test_can_create_service_health_without_checks():
-    ServiceHealth(serviceName="test")
+    ServiceHealth(service_name="test")
     assert True
 
 
 def test_can_add_result_to_service_health():
-    service_health = ServiceHealth(serviceName="test")
+    service_health = ServiceHealth(service_name="test")
     service_health.add_result(HealthCheckResult.ok(check_name="test_check"))
     assert True

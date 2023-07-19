@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, Callable, Coroutine
+from typing import Any, Callable, Coroutine, Tuple
 
 from asyncer import asyncify
 
@@ -28,9 +28,9 @@ def create_health_check_with_timeout(name: str, timeout_seconds: int, run: Healt
 
 
 async def run_checks(
-    service_health: ServiceHealth,
+    service_name: str,
     checks: list[HealthChecker],
-) -> None:
+) -> Tuple[dict, bool]:
     tasks: list[Any] = []
     for check in checks:
         if check.timeout_seconds == 0:
@@ -44,6 +44,8 @@ async def run_checks(
             tasks.append(task)
 
     results = await asyncio.gather(*tasks)
+
+    service_health = ServiceHealth(service_name=service_name)
 
     for i, result in enumerate(results):
         if type(result) is tuple:
@@ -59,3 +61,5 @@ async def run_checks(
                     "did not return a HealthCheckResult",
                 )
             )
+
+    return service_health.to_dict(), service_health.healthy

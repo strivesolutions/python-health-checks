@@ -5,4 +5,3 @@ from .health_checker import (
     create_health_check,  # noqa
     create_health_check_with_timeout,  # noqa
 )
-from .service_health import ServiceHealth  # noqa
