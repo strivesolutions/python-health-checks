@@ -19,7 +19,7 @@ class ServiceHealth:
         return any(result.status == HealthCheckStatus.unhealthy for result in self.checks.values())
 
     def add_result(self, result: HealthCheckResult) -> None:
-        self.checks[result.checkName] = result
+        self.checks[result.check_name] = result
 
         if result.status == HealthCheckStatus.unhealthy and not self.unhealthy:
             self.unhealthy = True

@@ -3,9 +3,9 @@ from strivehealthchecks.health_check_result import HealthCheckResult, HealthChec
 
 def test_to_dict():
     result = HealthCheckResult(
-        checkName="test_check",
+        check_name="test_check",
         status=HealthCheckStatus.ok,
-        errorDetails="error_details",
+        error_details="error_details",
     )
 
     assert result.to_dict() == {

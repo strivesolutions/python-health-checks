@@ -12,29 +12,29 @@ class HealthCheckStatus(str, Enum):
 
 @dataclass
 class HealthCheckResult:
-    checkName: str
+    check_name: str
     status: HealthCheckStatus
-    errorDetails: Optional[str] = None
+    error_details: Optional[str] = None
 
     def to_dict(self) -> dict:
         d = {
-            "checkName": self.checkName,
+            "checkName": self.check_name,
             "status": self.status.value,
         }
 
-        if self.errorDetails:
-            d["errorDetails"] = self.errorDetails
+        if self.error_details:
+            d["errorDetails"] = self.error_details
 
         return d
 
     @staticmethod
     def ok(check_name: str) -> HealthCheckResult:
-        return HealthCheckResult(checkName=check_name, status=HealthCheckStatus.ok)
+        return HealthCheckResult(check_name=check_name, status=HealthCheckStatus.ok)
 
     @staticmethod
     def unhealthy(check_name: str, error_details: str) -> HealthCheckResult:
         return HealthCheckResult(
-            checkName=check_name,
+            check_name=check_name,
             status=HealthCheckStatus.unhealthy,
-            errorDetails=error_details,
+            error_details=error_details,
         )
