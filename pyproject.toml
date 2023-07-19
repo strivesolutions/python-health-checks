@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "strivehealthchecks"
+version = "0.1.0"
+requires-python = ">=3.10"
+description = "A flexible logging abstraction layer"
+readme = "README.md"
+license = { file="LICENSE" }
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[project.urls]
+"Homepage" = "https://github.com/strivesolutions/python-fastapi-framework"
+"Bug Tracker" = "https://github.com/strivesolutions/python-fastapi-framework/issues"
+
+[tool.black]
+line-length=160
+
+[tool.ruff]
+line-length=168
