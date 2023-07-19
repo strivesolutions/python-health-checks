@@ -19,7 +19,7 @@ class ServiceHealth:
         return any(result.status == HealthCheckStatus.unhealthy for result in self.checks.values())
 
     def add_result(self, result: HealthCheckResult) -> None:
-        self.checks[result.check_name] = result
+        self.checks[result.checkName] = result
 
         if result.status == HealthCheckStatus.unhealthy and not self.unhealthy:
             self.unhealthy = True
@@ -30,3 +30,6 @@ class ServiceHealth:
             "unhealthy": self.unhealthy,
             "checks": [check.to_dict() for check in self.checks.values()] if self.checks else [],
         }
+
+    def serialize(self) -> dict:
+        return self.to_dict()

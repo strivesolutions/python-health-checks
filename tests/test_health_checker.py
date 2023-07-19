@@ -12,7 +12,7 @@ async def test_run_checks():
         return HealthCheckResult.ok(name)
 
     check = create_health_check("test", passing_check)
-    service_health = ServiceHealth(service_name="test")
+    service_health = ServiceHealth(serviceName="test")
     await run_checks(service_health, [check])
     assert not service_health.unhealthy
 
@@ -25,7 +25,7 @@ async def test_check_timeout():
 
     check = create_health_check_with_timeout("slow", 1, slow_check)
 
-    service_health = ServiceHealth(service_name="test")
+    service_health = ServiceHealth(serviceName="test")
     start = default_timer()
     await run_checks(service_health, [check])
     end = default_timer()
