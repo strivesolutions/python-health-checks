@@ -4,22 +4,22 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "strivehealthchecks"
-version = "1.0.0"
+version = "1.0.1"
 requires-python = ">=3.10"
 description = "A simple framework for running health checks."
 readme = "README.md"
-license = { file="LICENSE" }
+license = { file = "LICENSE" }
 dynamic = ["dependencies"]
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+dependencies = { file = ["requirements.txt"] }
 
 [project.urls]
 "Homepage" = "https://github.com/strivesolutions/python-health-checks"
 "Bug Tracker" = "https://github.com/strivesolutions/python-health-checks/issues"
 
 [tool.black]
-line-length=160
+line-length = 160
 
 [tool.ruff]
-line-length=168
+line-length = 168

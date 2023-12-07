@@ -1,5 +1,5 @@
 import asyncio
-from typing import Any, Callable, Coroutine
+from typing import Callable
 
 from asyncer import asyncify
 
@@ -22,39 +22,35 @@ class HealthChecker:
             return HealthCheckResult.unhealthy(self.name, str(e))
 
 
+async def run_check_with_timeout(check: HealthChecker):
+    try:
+        result = await asyncio.wait_for(asyncify(check.run)(), check.timeout_seconds)
+        return result if isinstance(result, HealthCheckResult) else None
+    except asyncio.TimeoutError:
+        return None
+
+
 async def run_checks(
     service_name: str,
     checks: list[HealthChecker],
 ) -> ServiceHealth:
-    tasks: list[Any] = []
+    tasks = []
     for check in checks:
         if check.timeout_seconds == 0:
             tasks.append(asyncify(check.run)())
         else:
-            task: Coroutine = asyncio.wait(
-                [asyncio.create_task(asyncify(check.run)())],  # type: ignore
-                timeout=check.timeout_seconds,
-            )
+            tasks.append(run_check_with_timeout(check))
 
-            tasks.append(task)
-
-    results = await asyncio.gather(*tasks)
+    results = await asyncio.gather(*tasks, return_exceptions=True)
 
     service_health = ServiceHealth(service_name=service_name)
 
-    for i, result in enumerate(results):
-        if type(result) is tuple:
-            check = checks[i]
-            service_health.add_result(HealthCheckResult.unhealthy(check.name, f"did not respond after {check.timeout_seconds} seconds"))
-        elif type(result) is HealthCheckResult:
-            service_health.add_result(result)
-        else:
-            check = checks[i]
+    for check, result in zip(checks, results):
+        if result is None or isinstance(result, Exception):
             service_health.add_result(
-                HealthCheckResult.unhealthy(
-                    check.name,
-                    "did not return a HealthCheckResult",
-                )
+                HealthCheckResult.unhealthy(check.name, f"did not respond after {check.timeout_seconds} seconds" if result is None else "exception occurred")
             )
+        else:
+            service_health.add_result(result)
 
     return service_health
