@@ -1,4 +1,4 @@
-from strivehealthchecks.health_check_result import HealthCheckResult, HealthCheckStatus
+from strivehealthchecks import HealthCheckResult, HealthCheckStatus
 
 
 def test_to_dict():
