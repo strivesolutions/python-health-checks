@@ -31,7 +31,6 @@ jobs:
         run: |
           curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
           echo "$HOME/.rye/shims" >> $GITHUB_PATH
-        shell: bash
 
       - name: Install dependencies
         run: rye sync
@@ -57,7 +56,6 @@ jobs:
         run: |
           curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
           echo "$HOME/.rye/shims" >> $GITHUB_PATH
-        shell: bash
 
       - name: Install dependencies
         run: rye sync
@@ -89,7 +87,6 @@ jobs:
         run: |
           curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
           echo "$HOME/.rye/shims" >> $GITHUB_PATH
-        shell: bash
 
       - name: Build
         run: rye build
