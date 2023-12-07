@@ -1,0 +1,92 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    paths-ignore: "**/*.md"
+
+  push:
+    branches:
+      - main
+    paths-ignore: "**/*.md"
+
+jobs:
+  checks:
+    name: Run tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.version }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install rye
+        run: |
+          curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
+          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: rye sync
+
+      - name: Test
+        run: rye run pytest tests
+
+  lint:
+    name: Run lint checks
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ["3.10"]
+
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.version }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install rye
+        run: |
+          curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
+          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: rye sync
+
+      - name: Lint
+        run: rye run ruff check . --show-source --output-format=github
+
+      - name: Format check
+        run: rye run ruff format . --check
+
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.version }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install rye
+        run: |
+          curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
+          echo "$HOME/.rye/shims" >> $GITHUB_PATH
+
+      - name: Build
+        run: rye build

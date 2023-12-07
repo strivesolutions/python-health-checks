@@ -3,8 +3,7 @@ from timeit import default_timer
 
 import pytest
 
-from strivehealthchecks import HealthCheckResult, run_checks
-from strivehealthchecks.health_checker import HealthChecker
+from strivehealthchecks import HealthChecker, HealthCheckResult, run_checks
 
 
 @pytest.mark.asyncio

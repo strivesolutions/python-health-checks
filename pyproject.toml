@@ -1,15 +1,16 @@
-[build-system]
-requires = ["setuptools", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "strivehealthchecks"
-version = "1.0.1"
+version = "1.1.0"
 requires-python = ">=3.10"
 description = "A simple framework for running health checks."
 readme = "README.md"
 license = { file = "LICENSE" }
-dynamic = ["dependencies"]
+
+dependencies = ["asyncer>=0.0.2"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
@@ -17,6 +18,10 @@ dependencies = { file = ["requirements.txt"] }
 [project.urls]
 "Homepage" = "https://github.com/strivesolutions/python-health-checks"
 "Bug Tracker" = "https://github.com/strivesolutions/python-health-checks/issues"
+
+[tool.rye]
+managed = true
+dev-dependencies = ["ruff>=0.1.7", "pytest>=7.4.3", "pytest-asyncio>=0.23.2"]
 
 [tool.black]
 line-length = 160
