@@ -10,6 +10,13 @@ on:
     paths:
       - "pyproject.toml"
 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release"
+        required: true
+        default: "0.0.0"
+
 jobs:
   cancel-previous:
     name: Cancel previous runs
@@ -36,10 +43,18 @@ jobs:
 
       - name: Detect new version
         id: changes
+        if: ${{ github.event_name == 'push' }}
         run: |
           NEW_VERSION="$(./versionChangeCheck.sh)"
           echo "New version if changed = '$NEW_VERSION'"
           echo ::set-output name=newVersion::$NEW_VERSION
+
+      - name: Detect new version
+        id: changes
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "New version if changed = '${{ github.event.inputs.version }}'"
+          echo ::set-output name=newVersion::${{ github.event.inputs.version }}
 
   create-release:
     name: Create release
@@ -58,11 +73,9 @@ jobs:
           python-version: ${{env.PYTHON_VERSION}}
 
       - name: Install rye
-        working-directory: api
         run: |
           curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION="--yes" bash
           echo "$HOME/.rye/shims" >> $GITHUB_PATH
-        shell: bash
 
       - name: Build
         run: rye build
