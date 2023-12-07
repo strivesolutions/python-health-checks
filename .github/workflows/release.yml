@@ -32,9 +32,6 @@ jobs:
     name: Detect version change
     runs-on: ubuntu-latest
 
-    outputs:
-      newVersion: ${{ steps.changes.outputs.newVersion }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,13 +43,13 @@ jobs:
         run: |
           NEW_VERSION="$(./versionChangeCheck.sh)"
           echo "New version if changed = '$NEW_VERSION'"
-          echo ::set-output name=newVersion::$NEW_VERSION
+          echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Detect new version
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           echo "New version if changed = '${{ github.event.inputs.version }}'"
-          echo ::set-output name=newVersion::${{ github.event.inputs.version }}
+          echo "newVersion=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
 
   create-release:
     name: Create release
