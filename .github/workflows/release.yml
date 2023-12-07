@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      newVersion: ${{ steps.version.outputs.newVersion }}
+      newVersion: ${{ env.newVersion }}
 
     steps:
       - name: Checkout
@@ -47,18 +47,13 @@ jobs:
         run: |
           NEW_VERSION="$(./versionChangeCheck.sh)"
           echo "New version if changed = '$NEW_VERSION'"
-          echo "newVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "newVersion=$NEW_VERSION" >> $GITHUB_ENV
 
-      - name: Detect new version
+      - name: Hard-code new version
         id: static
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          echo "newVersion=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-
-      - name: Set new version
-        id: version
-        run: |
-          echo "newVersion=${{ env.newVersion }}" >> $GITHUB_OUTPUT
+          echo "newVersion=${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
   create-release:
     name: Create release
